@@ -13,14 +13,16 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @livewireStyles
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+            @include('components.layouts.navigation')
             <!-- Page Content -->
             <main>
                 {{ $slot }}
             </main>
+            @livewireScripts
         </div>
     </body>
 </html>
