@@ -70,7 +70,7 @@
                     @csrf
                     <input type="hidden" autocomplete="false" style="display: none;">
                     <div class="grid grid-cols-12">
-                        <input type="text" autocomplete="off" autofocus placeholder="Write your message here" maxlength="1700" class="col-span-10 bg-gray-100 border-0 outline-0 focus:border-0 focus:ring-0 hover:ring-0 rounded-lg focus:outline-none">
+                        <input type="text" autocomplete="off" autofocus placeholder="Write your message here" maxlength="1700" class="col-span-10 bg-gray-200 border-0 outline-0 focus:border-0 focus:ring-0 hover:ring-0 rounded-lg focus:outline-none">
 
                         <button class="col-span-2 flex gap-2 justify-center text-blue-800 items-center" type="submit">
                             Send
