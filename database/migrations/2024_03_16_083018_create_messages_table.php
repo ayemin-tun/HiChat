@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreign('receiver_id')->references('id')->on('users');
 
             $table->timestamp('read_at')->nullable();
-
+            $table->text('body');
             // delete action
             $table->timestamp('receiver_deleted_at')->nullable();
             $table->timestamp('sender_deleted_at')->nullable();

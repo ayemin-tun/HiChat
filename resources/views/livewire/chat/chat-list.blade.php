@@ -1,4 +1,14 @@
-<div x-data="{type:'all'}" class="flex flex-col transition-all h-full overflow-hidden">
+<div x-data="{type:'all',query:@entangle('query')}" x-init="
+      setTimeout(()=>{
+         conversationElement = document.getElementById('conversation-'+query);
+         // scroll to that element
+         if(conversationElement){
+            conversationElement.scrollIntoView({'behavior':'smooth'});
+         }
+
+      }),200;
+   " class="flex flex-col transition-all h-full overflow-hidden">
+
    <header class="px-3 z-10 bg-white sticky top-0 w-full py-2">
       <div class="border-b justify-between flex items-center pb-2">
          <div class="flex items-center gap-2">
@@ -24,18 +34,24 @@
 
    <main class="overflow-y-scroll overflow-hidden grow h-full relative" style="contain:content">
       <ul class="p-2 grid w-full space-y-2">
-         <li class="py-3 hover:bg-gray-200 rounded-2xl drak:hover:bg-gray-700/20 transition-colors duration-150 flex gap-4 relative w-full cursor-pointer px-2">
-            <a href="#" class="shrink-0">
-               <x-avatar />
+         @if($conversations)
+         @foreach($conversations as $key=>$conversation)
+         <li id="conversation-{{$conversation->id}}" wire:key={{$conversation->id}} class="py-3 hover:bg-gray-200 rounded-2xl drak:hover:bg-gray-700/20 transition-colors duration-150 flex gap-4 relative w-full cursor-pointer px-2 {{$conversation->id == $selectedConversation?->id?'bg-gray-200':''}}">
+            <a href="{{route('chat',$conversation->id)}}" class="shrink-0">
+               <x-avatar src="https://source.unsplash.com/500x500?face-{{$key}}" />
             </a>
             <aside class="grid grid-cols-12 w-full">
-               <a href="#" class="col-span-11 border-b pb-2 border-gray-200 relative overflow-hidden truncate leading-5 w-full flex-nowrap p-1">
+               <a href="{{route('chat',$conversation->id)}}" class="col-span-11 border-b pb-2 border-gray-200 relative overflow-hidden truncate leading-5 w-full flex-nowrap p-1">
                   <!-- name and date -->
                   <div class="flex justify-between w-full item-center">
-                     <h6 class="truncate font-medium tracking-wider text-gray-500">
-                        John Doe
+                     <!-- Name -->
+                     <h6 class="truncate font-medium tracking-wider text-gray-800">
+                        {{$conversation->getReceiver()->name}}
                      </h6>
-                     <small class="text-gray-700">5d</small>
+                     <!-- Date -->
+                     <small class="text-gray-700">
+                        {{$conversation->messages?->last()?->created_at?->shortAbsoluteDiffForHumans()}}
+                     </small>
                   </div>
 
                   <!-- message body -->
@@ -55,7 +71,7 @@
                         </span> -->
 
                      <p class="grow truncate text-sm font-[100]">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga at ipsa blanditiis similique eos impedit, dolorum quod, quibusdam perspiciatis excepturi amet quasi ratione debitis porro dolore. Aliquam aspernatur sapiente repellat?
+                        {{$conversation->messages?->last()?->body}}
                      </p>
                      <span class="font-bold p-px px-2 text-sm shrink-0 rounded-full bg-blue-500 text-white">5</span>
                   </div>
@@ -97,6 +113,10 @@
                </div>
             </aside>
          </li>
+         @endforeach
+         @else
+
+         @endif
       </ul>
    </main>
 </div>

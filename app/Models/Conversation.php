@@ -19,4 +19,13 @@ class Conversation extends Model
     {
         return $this->hasMany(Message::class);
     }
+    public function getReceiver()
+    {
+        // check if the sender is auth then other user is receiver if the sender is not auth the other user is sender
+        if ($this->sender_id == auth()->id()) {
+            return User::firstWhere('id', $this->receiver_id);
+        } else {
+            return User::firstWhere('id', $this->sender_id);
+        }
+    }
 }
