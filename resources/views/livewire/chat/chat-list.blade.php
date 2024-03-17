@@ -3,11 +3,16 @@
          conversationElement = document.getElementById('conversation-'+query);
          // scroll to that element
          if(conversationElement){
-            conversationElement.scrollIntoView({'behavior':'smooth'});
+            conversationElement.scrollIntoView({ behavior: 'smooth' });
          }
 
-      }),200;
-   " class="flex flex-col transition-all h-full overflow-hidden">
+      },200);"
+
+      @scroll-top.window="$nextTick(() => {
+         document.getElementById('conversation-'+query).scrollIntoView({ behavior: 'smooth' });
+      })"    
+
+      class="flex flex-col transition-all h-full overflow-hidden">
 
    <header class="px-3 z-10 bg-white sticky top-0 w-full py-2">
       <div class="border-b justify-between flex items-center pb-2">
@@ -56,6 +61,8 @@
 
                   <!-- message body -->
                   <div class="flex gap-x-2 items-center">
+                  @if($conversation->messages?->last()?->sender_id === auth()->id())
+                     @if($conversation->messages?->last()->isRead())
                      <!-- double tip -->
                      <span class="text-blue-800">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-all" viewBox="0 0 16 16">
@@ -63,17 +70,29 @@
                            <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708" />
                         </svg>
                      </span>
+                     @else
                      <!-- single tip -->
-                     <!-- <span>
-                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                              <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
-                           </svg>
-                        </span> -->
+                     <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+                           <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
+                        </svg>
+                     </span>
+                     @endif
+                     you: 
+                  @endif
 
-                     <p class="grow truncate text-sm font-[100]">
+                     <p @class([ 
+                        'grow truncate text-sm font-[100]' , 
+                        'font-extrabold'=> $conversation?->isNewMessage()])
+                        >
                         {{$conversation->messages?->last()?->body}}
                      </p>
-                     <span class="font-bold p-px px-2 text-sm shrink-0 rounded-full bg-blue-500 text-white">5</span>
+
+                     @if($conversation->isNewMessage())
+                     <span class="font-bold p-px px-2 text-sm shrink-0 rounded-full bg-blue-500 text-white">
+                        {{$conversation->unreadMessageCount()}}
+                     </span>
+                     @endif
                   </div>
                </a>
 
@@ -119,4 +138,5 @@
          @endif
       </ul>
    </main>
+   
 </div>

@@ -1,7 +1,10 @@
-<div class="w-full overflow-hidden" x-data="{height:0,conversationElement:document.getElementById('conversation')}" x-init="
-    height = conversationElement.scrollHeight;
-    $nextTick(()=>conversationElement.scrollTop=height); //nextTrick is run after the alpine update is finish
-    " @scroll-bottom.window=" $nextTick(()=>conversationElement.scrollTop=height);">
+<div class="w-full overflow-hidden"
+    x-data="{height:0,conversationElement:document.getElementById('conversation')}"
+    x-init="
+        height = conversationElement.scrollHeight;
+         $nextTick(()=>conversationElement.scrollTop=height); //nextTrick is run after the alpine update is finish
+    " 
+    @scroll-bottom.window=" $nextTick(()=>conversationElement.scrollTop=height);">
 
     <div class="border-b flex flex-col h-full grow overflow-y-scroll">
 
@@ -64,9 +67,7 @@
                         <p @class([ 'text-xs' , 'text-gray-500'=>!($message->sender_id=== auth()->id()),
                             'text-white'=>$message->sender_id=== auth()->id(),
                             ])>
-                            @if($message->updated_at->shortAbsoluteDiffForHumans()==='0s') now @else {{$message->
-                            updated_at->shortAbsoluteDiffForHumans()}}
-                            @endif
+                            {{ \Carbon\Carbon::parse($message->updated_at)->format('h:i A') }}
                         </p>
                         <!-- message status show or not -->
                         @if($message->sender_id === auth()->id())
@@ -108,12 +109,14 @@
             <div class="p-2 border-t">
                 <form action="post" autocapitalize="off" x-data="{body:@entangle('body')}" @submit.prevent="$wire.sendMessage">
                     @csrf
-                    {{-- <input type="hidden" autocomplete="false" style="display: none;"> --}}
+                    <input type="hidden" autocomplete="false" style="display: none;">
                     <div class="grid grid-cols-12">
                         <input x-model="body" type="text" placeholder="Write your message here" maxlength="1700" class="col-span-10 bg-gray-200 border-0 outline-0 focus:border-0 focus:ring-0 hover:ring-0 rounded-lg focus:outline-none">
 
                         <button x-bind:disabled="!body.trim()" class="col-span-2 flex gap-2 justify-center text-blue-800 items-center" type="submit">
-                            Send
+                            <span class="sm:block hidden">
+                                Send
+                             </span>
                             <span class="rotate-45">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
                                     <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z" />

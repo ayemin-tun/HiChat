@@ -12,13 +12,14 @@ class Conversation extends Model
 
     protected $fillable = [
         'receiver_id',
-        'sender_id'
+        'sender_id',
     ];
 
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class);
     }
+
     public function getReceiver()
     {
         // check if the sender is auth then other user is receiver if the sender is not auth the other user is sender
@@ -27,5 +28,15 @@ class Conversation extends Model
         } else {
             return User::firstWhere('id', $this->sender_id);
         }
+    }
+
+    public function unreadMessageCount(): int
+    {
+        return Message::where('conversation_id', $this->id)->where('receiver_id', auth()->user()->id)->whereNull('read_at')->count();
+    }
+
+    public function isNewMessage(): bool
+    {
+        return $this->unreadMessageCount() > 0;
     }
 }

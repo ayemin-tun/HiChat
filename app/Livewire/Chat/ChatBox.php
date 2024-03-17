@@ -32,15 +32,16 @@ class ChatBox extends Component
         ]);
         $this->reset(['body']);
 
+        // scroll the bottom where message is newly send
         $this->dispatch('scroll-bottom');
-
+        //auto update the message box
         $this->loadedMessages->push($createdMessage);
 
         //make conversition update list to top
         $this->selectedConversation->updated_at = now();
         $this->selectedConversation->save();
 
-        // refresh chatList
+        // refresh chatList and also scroll that chat chatlist
         // $this->dispatchTo('chat.chat-list', 'refresh'); //livewire version 2
         $this->dispatch('refresh')->to(ChatList::class);
     }

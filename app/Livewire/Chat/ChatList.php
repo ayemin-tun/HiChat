@@ -20,4 +20,10 @@ class ChatList extends Component
             'conversations' => $user->conversations()->latest('updated_at')->get(),
         ]);
     }
+
+    #[On('refresh')]
+    public function scrollTop()
+    {
+        $this->dispatch('scroll-top');
+    }
 }
