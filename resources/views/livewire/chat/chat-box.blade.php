@@ -67,7 +67,7 @@
                         <p @class([ 'text-xs' , 'text-gray-500'=>!($message->sender_id=== auth()->id()),
                             'text-white'=>$message->sender_id=== auth()->id(),
                             ])>
-                            {{ \Carbon\Carbon::parse($message->updated_at)->format('h:i A') }}
+                            @formatDate($message->updated_at)
                         </p>
                         <!-- message status show or not -->
                         @if($message->sender_id === auth()->id())
