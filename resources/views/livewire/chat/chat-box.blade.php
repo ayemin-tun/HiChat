@@ -17,7 +17,7 @@
                     </svg>
                 </a>
                 <div class="shrink-0">
-                    <x-avatar class="h-9 w-9 lg:h-11 lg:w-11" />
+                    <x-avatar src="{{$selectedConversation->getReceiver()->image}}" class="h-9 w-9 lg:h-11 lg:w-11" />
                 </div>
                 <h6 class="font-bold truncate">
                     {{$selectedConversation->getReceiver()->email}}
@@ -52,7 +52,7 @@
                     'invisible'=>$previousMessage?->sender_id === $message->sender_id,
                     'hidden'=>$message->sender_id === auth()->id()
                     ])>
-                    <x-avatar />
+                    <x-avatar src="{{$selectedConversation->getReceiver()->image}}"/>
                 </div>
 
                 <div @class([ 'flex flex-wrap txt-[15px] rounded-xl p-2.5 flex flex-col text-black ' , 'rounded-bl-none border bg-gray-200'=>!($message->sender_id=== auth()->id()),

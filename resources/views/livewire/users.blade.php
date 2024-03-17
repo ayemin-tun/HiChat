@@ -5,7 +5,7 @@
         @foreach($users as $key=>$user)
         <div class="w-full bg-white border-gray-200 rounded-lg p-5 shadow">
             <div class="flex flex-col items-center pb-10">
-                <img src="https://source.unsplash.com/500x500?face-{{$key}}" alt="" class="w-20 h-20 mb-2 5 rounded-full shadow lg">
+                <x-avatar src="{{$user->image}}" class="w-20 h-20 mb-2 5 rounded-full shadow lg"/>
                 <h5 class="mb-1 text-xl font-medim text-gray-900">
                     {{$user->name}}
                 </h5>

@@ -2,7 +2,7 @@
  
     @if ($src)
         <img @class([ 'shrink-0 w-full h-full object-cover object-center rounded-full', ])
-            src="{{ $src }}"
+            src="{{ asset( $src ) }}"
         />
     @endif
 

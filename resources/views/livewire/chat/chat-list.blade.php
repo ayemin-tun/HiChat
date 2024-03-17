@@ -43,7 +43,7 @@
          @foreach($conversations as $key=>$conversation)
          <li id="conversation-{{$conversation->id}}" wire:key={{$conversation->id}} class="py-3 hover:bg-gray-200 rounded-2xl drak:hover:bg-gray-700/20 transition-colors duration-150 flex gap-4 relative w-full cursor-pointer px-2 {{$conversation->id == $selectedConversation?->id?'bg-gray-200':''}}">
             <a href="{{route('chat',$conversation->id)}}" class="shrink-0">
-               <x-avatar src="https://source.unsplash.com/500x500?face-{{$key}}" />
+               <x-avatar src="{{$conversation->getReceiver()->image}}" />
             </a>
             <aside class="grid grid-cols-12 w-full">
                <a href="{{route('chat',$conversation->id)}}" class="col-span-11 border-b pb-2 border-gray-200 relative overflow-hidden truncate leading-5 w-full flex-nowrap p-1">
