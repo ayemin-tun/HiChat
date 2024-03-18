@@ -20,7 +20,8 @@
                     <x-avatar src="{{$selectedConversation->getReceiver()->image}}" class="h-9 w-9 lg:h-11 lg:w-11" />
                 </div>
                 <h6 class="font-bold truncate">
-                    {{$selectedConversation->getReceiver()->email}}
+                    {{$selectedConversation->getReceiver()->name}}<br/>
+                    <span class="text-gray-400 text-xs">{{$selectedConversation->getReceiver()->email}}</span>
                 </h6>
             </div>
         </header>

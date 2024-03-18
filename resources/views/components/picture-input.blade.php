@@ -1,8 +1,13 @@
+@props(['src' => null])
 <div class="flex flex-col justify-center gap-2 items-center" x-data="picturePreview()">
+  
     <div class="rounded-md">
-        <img id="preview" src="{{$src}}" alt="" class="w-24 h-24 rounded-full object-cover bg-gray-300">
+        @php
+            $src = $src ?: asset('logo/noavatar.png');
+        @endphp
+        <img id="preview" src="{{ $src }}" alt="" class="w-24 h-24 rounded-full object-cover bg-gray-300">
     </div>
-
+    
     <div>
         <x-secondary-button class="relative" @click="document.getElementById('picture').click()">
             <div class="flex gap-2">
@@ -15,7 +20,7 @@
             <input @change="showPreview(event)" type="file" name="image" id="picture" class="absolute inset-0 -z-10 opactiy-0">
         </x-secondary-button>
     </div>
-
+    <x-input-error class="mt-2" :messages="$errors->get('image')" />
     <script>
         function picturePreview() {
             return {
