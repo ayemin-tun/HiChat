@@ -1,5 +1,8 @@
 <div class="w-full overflow-hidden"
-    x-data="{height:0,conversationElement:document.getElementById('conversation')}"
+    x-data="{
+        height:0,
+        conversationElement:document.getElementById('conversation')
+        }"
     x-init="
         height = conversationElement.scrollHeight;
          $nextTick(()=>conversationElement.scrollTop=height); //nextTrick is run after the alpine update is finish
@@ -27,7 +30,25 @@
         </header>
 
         <!-- body -->
-        <div id='conversation' class="flex flex-col gap-3 p-2.5 overflow-auto flex-grow overscroll-contain overflow-x-hidden w-full my-auto">
+        <div 
+        @scroll="
+            scrollTop=$el.scrollTop;
+            if(scrollTop <=0){
+                $dispatch('loadMore');
+            }
+        "
+        @update-chat-height.window ="
+            $nextTick(() => {
+            const newHeight = $el.scrollHeight;
+            const heightDifference = newHeight - height;
+            if (heightDifference > 0) {
+                $el.scrollTop += heightDifference;
+            }
+            height = newHeight;
+        });
+        "
+        id='conversation' 
+        class="flex flex-col gap-3 p-2.5 overflow-auto flex-grow overscroll-contain overflow-x-hidden w-full my-auto">
 
             @if($loadedMessages->count()>0)
 

@@ -84,6 +84,8 @@ return [
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
+    'message_show_limit' => env('MESSAGE_SHOW_LIMIT', 10),
+
     /*
     |--------------------------------------------------------------------------
     | Encryption Key
