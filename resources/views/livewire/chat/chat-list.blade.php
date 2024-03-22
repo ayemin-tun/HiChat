@@ -1,12 +1,18 @@
-<div x-data="{type:'all',query:@entangle('query')}" x-init="
+<div 
+   x-data="{type:'all',query:@entangle('query')}"
+    x-init="
       setTimeout(()=>{
          conversationElement = document.getElementById('conversation-'+query);
          // scroll to that element
          if(conversationElement){
             conversationElement.scrollIntoView({ behavior: 'smooth' });
          }
+      },200);
 
-      },200);"
+      Echo.private('users.{{Auth()->User()->id}}').notification((notification)=>{
+              @this.dispatch('refresh');
+        });
+      "
 
       @scroll-top.window="$nextTick(() => {
          document.getElementById('conversation-'+query).scrollIntoView({ behavior: 'smooth' });
