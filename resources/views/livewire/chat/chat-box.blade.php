@@ -1,11 +1,19 @@
 <div class="w-full overflow-hidden"
     x-data="{
         height:0,
-        conversationElement:document.getElementById('conversation')
+        conversationElement:document.getElementById('conversation'),
+        markAsRead:null,
         }"
     x-init="
         height = conversationElement.scrollHeight;
-         $nextTick(()=>conversationElement.scrollTop=height); //nextTrick is run after the alpine update is finish
+        $nextTick(()=>conversationElement.scrollTop=height); //nextTrick is run after the alpine update is finish
+
+        // when Message is receiver that message is make from read
+        Echo.private('users.{{Auth()->User()->id}}').notification((notification)=>{
+            if(notification['type'] == 'App\\Notifications\\MessageRead' && notification['conversation_id'] == {{$this->selectedConversation->id}}){
+                markAsRead = true;
+            }
+        });
     " 
     @scroll-bottom.window=" $nextTick(()=>conversationElement.scrollTop=conversationElement.scrollHeight);">
 
@@ -14,7 +22,7 @@
         <!-- Header -->
         <header class="w-full sticky inset-x-0 flex pb-[5px] pt-[5x] top-0 z-10 bg-white border-b">
             <div class="flex w-full items-center px-2 py-2 lg:px-4 gap-2 md:gap-5">
-                <a href="" class="shrink-0 lg:hidden">
+                <a href="{{route('chat.index')}}" class="shrink-0 lg:hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                     </svg>
@@ -96,23 +104,20 @@
                         <!-- message status show or not -->
                         @if($message->sender_id === auth()->id())
 
-                        <div>
-                            @if ($message->isRead())
+                        <div x-data="{markAsRead:@json($message->isRead())}">
                             <!-- double ticks -->
-                            <span @class('text-gray-100')>
+                            <span x-cloak x-show="markAsRead" @class('text-gray-100')>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-all" viewBox="0 0 16 16">
                                     <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0" />
                                     <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708" />
                                 </svg>
                             </span>
-                            @else
                             <!-- single ticks -->
-                            <span @class('text-gray-300')>
+                            <span  x-show="!markAsRead" @class('text-gray-300')>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
                                     <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
                                 </svg>
                             </span>
-                            @endif
 
                         </div>
                         @endif

@@ -3,6 +3,7 @@
 namespace App\Livewire\Chat;
 
 use App\Models\Message;
+use App\Notifications\MessageRead;
 use App\Notifications\MessageSent;
 use App\Services\MessageService;
 use Livewire\Attributes\On;
@@ -53,10 +54,17 @@ class ChatBox extends Component
                 // scroll the bottom where message is newly send
                 $this->dispatch('scroll-bottom');
                 $newMessage = Message::find($event['message_id']);
+
                 //auto update the message box
                 $this->loadedMessages->push($newMessage);
 
+                // auto update the chat list
                 $this->dispatch('refresh')->to(ChatList::class);
+
+                $newMessage->read_at = now();
+                $newMessage->save();
+
+                $this->selectedConversation->getReceiver()->notify(new MessageRead($this->selectedConversation->id));
             }
         }
     }
@@ -112,7 +120,7 @@ class ChatBox extends Component
             ));
 
         // // Make message that send from sender is to read
-        // $messageService->makeMessageRead($this->selectedConversation->id);
+        $messageService->makeMessageRead($this->selectedConversation->id);
 
         //make conversition update list to top
         $this->selectedConversation->updated_at = now();
