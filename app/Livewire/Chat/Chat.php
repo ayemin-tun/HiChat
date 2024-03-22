@@ -4,6 +4,7 @@ namespace App\Livewire\Chat;
 
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Services\MessageService;
 use Livewire\Component;
 
 class Chat extends Component
@@ -12,15 +13,12 @@ class Chat extends Component
 
     public $selectedConversation;
 
-    public function mount()
+    public function mount(MessageService $messageService)
     {
         $this->selectedConversation = Conversation::findOrFail($this->query);
-
         // Make message that send from sender is to read
-        Message::where('conversation_id', $this->selectedConversation->id)
-            ->where('receiver_id', auth()->id())
-            ->whereNull('read_at')
-            ->update(['read_at' => now()]);
+        $messageService->makeMessageRead($this->selectedConversation->id);
+
     }
 
     public function render()

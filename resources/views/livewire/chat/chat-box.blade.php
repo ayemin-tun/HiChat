@@ -7,7 +7,7 @@
         height = conversationElement.scrollHeight;
          $nextTick(()=>conversationElement.scrollTop=height); //nextTrick is run after the alpine update is finish
     " 
-    @scroll-bottom.window=" $nextTick(()=>conversationElement.scrollTop=height);">
+    @scroll-bottom.window=" $nextTick(()=>conversationElement.scrollTop=conversationElement.scrollHeight);">
 
     <div class="border-b flex flex-col h-full grow overflow-y-scroll">
 
@@ -64,7 +64,9 @@
             @endphp
             @endif
 
-            <div @class([ 
+            <div 
+            wire:key="{{time().$key}}"
+            @class([ 
                 'max-w-[85%] md:max-w-[78%] flex w-auto gap-2 relative mt-2' ,
                 'ml-auto'=> $message->sender_id=== auth()->id()
                 ])>
