@@ -24,7 +24,7 @@
                 <div class="flex items-center justify-end mt-4 gap-4">
                     <a href="/" class="cursor-pointer hover:underline duration-300">Back</a>
                     <button type="submit" class="px-3 py-2 text-white rounded-lg bg-blue-700 hover:bg-blue-400 duration-300">
-                        {{ __('Email Password Reset Link') }}
+                        {{ __('Password Reset') }}
                     </button>
                 </div>
             </form>

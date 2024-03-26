@@ -24,14 +24,16 @@ class Users extends Component
 
         $newConversation = Conversation::create([
             'sender_id' => $authenticatedUserId,
-            'receiver_id' => $userId
+            'receiver_id' => $userId,
         ]);
+
         return redirect()->route('chat', ['query' => $newConversation->id]);
     }
+
     public function render()
     {
         return view('livewire.users', [
-            'users' => User::where('id', "!=", auth()->id())->get()
+            'users' => User::where('id', '!=', auth()->id())->get(),
         ]);
     }
 }

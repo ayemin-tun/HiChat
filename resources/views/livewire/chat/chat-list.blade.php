@@ -33,19 +33,19 @@
          </button>
       </div>
       <!-- Filters -->
-      <div class="flex gap-3 items-center py-2 bg-white">
+      <!-- <div class="flex gap-3 items-center py-2 bg-white">
          <button @click="type='all'" :class="{'bg-blue-200 border-0 text-black':type=='all'}" class="inline-flex justif-center items-center rounded-full gap-x-1 text-xs font-medium px-3 lg:px-5 py-1 lg:py-2.5 border">
             All
          </button>
          <button @click="type='deleted'" :class="{'bg-blue-200 border-0 text-black':type=='deleted'}" class="inline-flex justif-center items-center rounded-full gap-x-1 text-xs font-medium px-3 lg:px-5 py-1 lg:py-2.5 border">
             Deleted
          </button>
-      </div>
+      </div> -->
    </header>
 
    <main class="overflow-y-scroll overflow-hidden grow h-full relative" style="contain:content">
       <ul class="p-2 grid w-full space-y-2">
-         @if($conversations)
+         @if($conversations->count() >0)
          @foreach($conversations as $key=>$conversation)
          <li id="conversation-{{$conversation->id}}" wire:key={{$conversation->id}} class="py-3 hover:bg-gray-200 rounded-2xl drak:hover:bg-gray-700/20 transition-colors duration-150 flex gap-4 relative w-full cursor-pointer px-2 {{$conversation->id == $selectedConversation?->id?'bg-gray-200':''}}">
             <a href="{{route('chat',$conversation->id)}}" class="shrink-0">
@@ -115,7 +115,7 @@
 
                      <x-slot name="content">
                         <div class="w-full">
-                           <button class="items-center gap-3 flex w-full px-4 py-2 text-sm leading-5 text-gray-500 hover:bg-gray-200 transition-all duration-150 ease-in-out focus:outline-none foucs:bg-gray-100">
+                           <!-- <button class="items-center gap-3 flex w-full px-4 py-2 text-sm leading-5 text-gray-500 hover:bg-gray-200 transition-all duration-150 ease-in-out focus:outline-none foucs:bg-gray-100">
                               <span>
                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-square" viewBox="0 0 16 16">
                                     <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
@@ -123,8 +123,11 @@
                                  </svg>
                               </span>
                               View Profile
-                           </button>
-                           <button class="items-center gap-3 flex w-full px-4 py-2 text-sm leading-5 text-gray-500 hover:bg-gray-200 transition-all duration-150 ease-in-out focus:outline-none foucs:bg-gray-100">
+                           </button> -->
+                           <button 
+                           onclick="confirm('Are You Sure! You want to delete this?') || event.stopImmediatePropagation()"
+                           wire:click="deleteByUser('{{encrypt($conversation->id)}}')"
+                           class="items-center gap-3 flex w-full px-4 py-2 text-sm leading-5 text-gray-500 hover:bg-gray-200 transition-all duration-150 ease-in-out focus:outline-none foucs:bg-gray-100">
                               <span>
                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                     <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
@@ -140,7 +143,14 @@
          </li>
          @endforeach
          @else
-
+            <div class="w-full h-[60vh] flex flex-col items-center justify-center">
+               No Conversation  ...
+               <a href={{route('users')}}>
+               <button class="px-4 py-1 bg-blue-500 text-white rounded-lg text-sm">
+                  start
+               </button>
+               </a>
+            </div>
          @endif
       </ul>
    </main>
